@@ -1,8 +1,22 @@
+import { useState } from 'react';
 import { Box, Button, Checkbox, Container, Flex, Heading, IconButton, Table, Tbody, Td, Th, Thead, Tr, Text, VStack } from "@chakra-ui/react";
 import { FaEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import EditModal from '../components/EditModal';
 
 const Settings = () => {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editData, setEditData] = useState({});
+
+  const handleEditClick = (data) => {
+    setEditData(data);
+    setIsEditModalOpen(true);
+  };
+
+  const handleSave = (updatedData) => {
+    console.log('Updated Data:', updatedData);
+    // Update the state or make an API call to save the updated data
+  };
+
   return (
     <Flex height="100vh">
       <Box width="250px" bg="orange.500" color="white" p={4}>
@@ -31,7 +45,18 @@ const Settings = () => {
         <Box bg="white" p={6} borderRadius="md" boxShadow="md">
           <Flex justify="space-between" align="center" mb={4}>
             <Heading size="md">Administrator</Heading>
-            <IconButton icon={<FaEdit />} aria-label="Edit" colorScheme="orange" />
+            <IconButton
+              icon={<FaEdit />}
+              aria-label="Edit"
+              colorScheme="orange"
+              onClick={() => handleEditClick({
+                menu: 'Administrator',
+                accessView: true,
+                create: true,
+                update: true,
+                delete: true,
+              })}
+            />
           </Flex>
           <Text mb={4}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
@@ -89,6 +114,12 @@ const Settings = () => {
           </Table>
         </Box>
       </Box>
+      <EditModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        data={editData}
+        onSave={handleSave}
+      />
     </Flex>
   );
 };
